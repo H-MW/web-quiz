@@ -1,22 +1,36 @@
 const questionTitle = document.querySelector('#questionTitle')
 const answeredSumText = document.querySelector('#answeredSumText')
 const questionSumText = document.querySelector('#questionSumText')
+const random = document.querySelector('#random')
 const answerText = document.querySelector('#answerText')
 const submitButton = document.querySelector('#submitButton')
 const resultText = document.querySelector('#resultText')
 const nextButton = document.querySelector('#nextButton')
 
-async function fetchData(id) {
+function loadQuizTexts() {
+    answeredSumText.innerText = questionNum.toString();
+    questionSumText.innerText = quizDataLength;
+    document.title = '問題： ' + questionObj[id];
+    questionTitle.innerText = questionObj[id];
+    random.checked = isRandom;
+    answerText.value = '';
+    submitButton.disabled = '';
+    resultText.style.display = "none";
+    nextButton.style.display = "none";
+}
+
+async function fetchData() {
     //csvデータを読み込む
     const url = 'https://2s3wfjnsnup7qspt.public.blob.vercel-storage.com/data-quW8ABzgq7JnBkLDsafvIoo1WzPS0c.csv';
     const response = await fetch(url).then((responses) => responses.text());
     quizData = await csvToJson(response);
+    
+    quizDataLength = quizData.length;
 
-    quizDataObj = {
-        quizLength: quizData.length.toString(),
-        question: quizData[id].question.toString(),
-        correctAnswer: quizData[id].correctAnswer.toString(),
-        correctAnswer2: quizData[id].correctAnswer2.toString()
+    for (let i = 0; i < quizDataLength; i++) {
+        questionObj[i] = quizData[i].question.toString();
+        correctAnswerObj[i] = quizData[i].correctAnswer.toString();
+        correctAnswer2Obj[i] = quizData[i].correctAnswer2.toString();
     }
 }
 
@@ -37,22 +51,9 @@ function csvToJson(data) {
     return jsonArray;
 }
 
-function loadQuizTexts(id) {
-    answeredSumText.innerText = questionNum.toString();
-    fetchData(id).then(() => {
-        questionSumText.innerText = quizDataObj.quizLength;
-        document.title = '問題： ' + quizDataObj.question;
-        questionTitle.innerText = quizDataObj.question;
-        answerText.value = '';
-        submitButton.disabled = '';
-        resultText.style.display = "none";
-        nextButton.style.display = "none";
-    })
-}
-
 function checkAnswer() {
-    let correctAnswer = quizDataObj.correctAnswer;
-    let correctAnswer2 = quizDataObj.correctAnswer2;
+    let correctAnswer = correctAnswerObj[id];
+    let correctAnswer2 = correctAnswer2Obj[id];
 
     answerValue = answerText.value;
 
@@ -80,15 +81,30 @@ function checkAnswer() {
 function nextQuestion() {
     id++;
     questionNum++;
-    loadQuizTexts(id);
+    loadQuizTexts();
 }
 
 let id = 0;
-let quizDataObj = new Object();
+let questionObj = new Object();
+let correctAnswerObj = new Object();
+let correctAnswer2Obj = new Object();
 let questionNum = 1;
+let quizDataLength;
+let isRandom = false;
 let correctAnswerText;
 
-loadQuizTexts(id);
+fetchData()
+.then(() => {
+    loadQuizTexts();
+})
+.catch((err) => {console.log(err);})
+
+random.addEventListener('change', () => {
+    isRandom = random.checked;
+    id = 0;
+    questionNum = 1;
+    loadQuizTexts();
+});
 submitButton.addEventListener('click', checkAnswer);
 nextButton.addEventListener('click', nextQuestion);
 
