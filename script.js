@@ -1,5 +1,5 @@
 const questionTitle = document.querySelector('#questionTitle')
-const answeredSumText = document.querySelector('#answeredSumText')
+const answeredSumText = document.querySelectorAll('.answeredSumText')
 const questionSumText = document.querySelector('#questionSumText')
 const random = document.querySelector('#random')
 const answerText = document.querySelector('#answerText')
@@ -8,7 +8,8 @@ const resultText = document.querySelector('#resultText')
 const nextButton = document.querySelector('#nextButton')
 
 function loadQuizTexts() {
-    answeredSumText.innerText = questionNum.toString();
+    answeredSumText[0].innerText = questionNum.toString();
+    answeredSumText[1].innerText = questionNum.toString();
     questionSumText.innerText = quizDataLength;
     document.title = '問題： ' + questionObj[id];
     questionTitle.innerText = questionObj[id];
