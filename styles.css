@@ -38,6 +38,11 @@ body {
     font-weight: bold;
 }
 
+.setting-random {
+    display: inline;
+    margin-left: 15px;
+}
+
 .form {
     display: flex;
     justify-content: center;
