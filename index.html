@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズ <span id="quizId"> quizId </span></title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="question" data-question-id="question<?php echo htmlspecialchars($id) ?>">
+                <p>問題文: <span id="question"> question </span></p>
+            </div>
+            <div class="remaining">
+                <p>問題数: <span id="answeredSum"> answeredSum </span>/<span id="questionSum"> questionSum </span></p>
+            </div>
+        </div>
+        <form class="form" onsubmit="return checkAnswer()">
+            <input type="text" name="answer" id="answer" class="answer" placeholder="答えを入力">
+            <button type="submit" id="submit-button" class="submit-button">答え合わせ</button>
+        </form>
+        <div id="result" class="result"></div>
+        <div class="next-button-container">
+        <button id="next-question-button" class="next-button" onclick="loadNextQuestion()" style="display:none;">次の問題へ</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
