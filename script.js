@@ -10,9 +10,9 @@ const nextButton = document.querySelector('#nextButton')
 function loadQuizTexts() {
     answeredSumText[0].innerText = questionNum.toString();
     answeredSumText[1].innerText = questionNum.toString();
-    questionSumText.innerText = quizDataLength;
-    document.title = '問題： ' + questionObj[id];
-    questionTitle.innerText = questionObj[id];
+    questionSumText.innerText = quizDataLength.toString();
+    document.title = '問題： ' + questionArray[numArray[id]];
+    questionTitle.innerText = questionArray[numArray[id]];
     random.checked = isRandom;
     answerText.value = '';
     submitButton.disabled = '';
@@ -29,9 +29,9 @@ async function fetchData() {
     quizDataLength = quizData.length;
 
     for (let i = 0; i < quizDataLength; i++) {
-        questionObj[i] = quizData[i].question.toString();
-        correctAnswerObj[i] = quizData[i].correctAnswer.toString();
-        correctAnswer2Obj[i] = quizData[i].correctAnswer2.toString();
+        questionArray[i] = quizData[i].question.toString();
+        correctAnswerArray[i] = quizData[i].correctAnswer.toString();
+        correctAnswer2Array[i] = quizData[i].correctAnswer2.toString();
     }
 }
 
@@ -53,8 +53,8 @@ function csvToJson(data) {
 }
 
 function checkAnswer() {
-    let correctAnswer = correctAnswerObj[id];
-    let correctAnswer2 = correctAnswer2Obj[id];
+    let correctAnswer = correctAnswerArray[numArray[id]];
+    let correctAnswer2 = correctAnswer2Array[numArray[id]];
 
     answerValue = answerText.value;
 
@@ -80,98 +80,52 @@ function checkAnswer() {
 }
 
 function nextQuestion() {
-    id++;
     questionNum++;
+    id = numArray[questionNum - 1];
     loadQuizTexts();
 }
 
 let id = 0;
-let questionObj = new Object();
-let correctAnswerObj = new Object();
-let correctAnswer2Obj = new Object();
-let questionNum = 1;
+let questionArray = new Array();
+let correctAnswerArray = new Array();
+let correctAnswer2Array = new Array();
+let numArray = new Array();
 let quizDataLength;
+let questionNum = 1;
 let isRandom = false;
 let correctAnswerText;
 
 fetchData()
 .then(() => {
+    for (let i = 0; i < quizDataLength; i++) {
+        numArray[i] = i;
+    }
     loadQuizTexts();
 })
-.catch((err) => {console.log(err);})
+.catch((err) => {console.err(err);})
 
 random.addEventListener('change', () => {
     isRandom = random.checked;
     id = 0;
     questionNum = 1;
-    loadQuizTexts();
-});
+    
+    for (let i = 0; i < quizDataLength; i++) {
+        numArray[i] = i;
+    }
+
+    if (isRandom) {
+        for (let i = quizDataLength; i > 0; i--) {
+            let randNum = Math.floor(Math.random() * i);
+            let numArray_ = numArray[--i];
+            numArray[i] = numArray[randNum];
+            numArray[randNum] = numArray_;
+        }
+        loadQuizTexts();
+    }else {
+        loadQuizTexts();
+    }
+    }
+)
+
 submitButton.addEventListener('click', checkAnswer);
 nextButton.addEventListener('click', nextQuestion);
-
-
-// function questionSum() {
-//     $handler = fopen(__DIR__.'/data.csv', 'r');
-//     for( $count = 0; fgets( $handler ); $count++ );
-
-//     return $count-1;
-// }
-
-// function fetchByID($id) {
-//     // ファイルを開く
-//     $handler = fopen(__DIR__.'/data.csv', 'r');
-
-//     // データを取得
-//     $question = [];
-//     while ($row = fgetcsv($handler)) {
-//         if (isDataRow($row)) {
-//             if ($row[0] === $id) {
-//                 $question = $row;
-//                 break;
-//             }
-//         }
-//     }
-
-//     // ファイルを閉じる
-//     fclose($handler);
-
-//     // データを返す
-//     return $question;
-// }
-
-// function isDataRow(array $row)
-// {
-//     // データの項目数が足りているか判定
-//     if (count($row) !== 4) {
-//         return false;
-//     }
-
-//     // データの項目の中身がすべて埋まっているか確認する
-//     foreach ($row as $value) {
-//         // 項目の値が空か判定
-//         if (empty($value)) {
-//             return false;
-//         }
-//     }
-
-//     // idの項目が数字ではない場合は無視する
-//     if (!is_numeric($row[0])) {
-//         return false;
-//     }
-
-//     // すべてチェックが問題なければtrue
-//     return true;
-// }
-
-// function generateFormattedData($data)
-// {
-//     // 構造化した配列を作成する
-//     $formattedData = [
-//         'id' => ($data[0]),
-//         'question' => ($data[1]),
-//         'correctAnswer' => ($data[2]),
-//         'correctAnswer2' => ($data[3]),
-//     ];
-
-//     return $formattedData;
-// }
