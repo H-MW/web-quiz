@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>クイズ <span id="quizId"> quizId </span></title>
+    <title>Quiz</title>
 </head>
 <body>
     <div class="container">
         <div class="content">
-            <div class="question" data-question-id="question<?php echo htmlspecialchars($id) ?>">
-                <p>問題文: <span id="question"> question </span></p>
+            <div class="question">
+                <p>問題文: <span id="questionTitle">読込中...</span></p>
             </div>
             <div class="remaining">
-                <p>問題数: <span id="answeredSum"> answeredSum </span>/<span id="questionSum"> questionSum </span></p>
+                <p>問題数: <span id="answeredSumText">読込中...</span>/<span id="questionSumText">読込中...</span></p>
             </div>
         </div>
-        <form class="form" onsubmit="return checkAnswer()">
-            <input type="text" name="answer" id="answer" class="answer" placeholder="答えを入力">
-            <button type="submit" id="submit-button" class="submit-button">答え合わせ</button>
+        <form class="form">
+            <input type="text" name="answerText" id="answerText" class="answerText" placeholder="答えを入力">
         </form>
-        <div id="result" class="result"></div>
+        <button type="submit" id="submitButton" class="submitButton">答え合わせ</button>
+        <div id="resultText" class="resultText"></div>
         <div class="next-button-container">
-        <button id="next-question-button" class="next-button" onclick="loadNextQuestion()" style="display:none;">次の問題へ</button>
+        <button id="nextButton" class="next-button" style="display:none;">次の問題へ</button>
         </div>
     </div>
 
