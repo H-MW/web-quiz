@@ -8,7 +8,7 @@ const nextButton = document.querySelector('#nextButton')
 
 async function fetchData(id) {
     //csvデータを読み込む
-    const url = 'https://2s3wfjnsnup7qspt.public.blob.vercel-storage.com/data-T5jgwSZ2TeR8OClkxJasgGYgKgbLTX.csv';
+    const url = 'https://2s3wfjnsnup7qspt.public.blob.vercel-storage.com/data-quW8ABzgq7JnBkLDsafvIoo1WzPS0c.csv';
     const response = await fetch(url).then((responses) => responses.text());
     quizData = await csvToJson(response);
 
