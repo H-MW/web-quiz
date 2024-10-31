@@ -29,9 +29,9 @@ async function fetchData() {
     quizDataLength = quizData.length;
 
     for (let i = 0; i < quizDataLength; i++) {
-        questionArray[i] = quizData[i].question.toString();
-        correctAnswerArray[i] = quizData[i].correctAnswer.toString();
-        correctAnswer2Array[i] = quizData[i].correctAnswer2.toString();
+        questionArray[i] = String(quizData[i].question);
+        correctAnswerArray[i] = String(quizData[i].correctAnswer);
+        correctAnswer2Array[i] = String(quizData[i].correctAnswer2);
     }
 }
 
