@@ -9,7 +9,7 @@ const resultText = document.querySelector('#resultText')
 const nextButton = document.querySelector('#nextButton')
 
 function quizReset() {
-    questionNum = 1; //問題数を初期状態にリセット
+    quizNum = 1; //問題数を初期状態にリセット
 
     //quizOrderArrayを[0,1,2,3, ... quizDataLength - 1]に
     for (let i = 0; i < quizDataLength; i++) {
@@ -19,9 +19,9 @@ function quizReset() {
 
 // クイズを読み込む
 function quizDOM() {
-    id = quizOrderArray[questionNum -1] //読み込むべき問題のIDを取得
+    id = quizOrderArray[quizNum -1] //読み込むべき問題のIDを取得
 
-    answeredSumText[0].innerText = answeredSumText[1].innerText = questionNum.toString();
+    answeredSumText[0].innerText = answeredSumText[1].innerText = quizNum.toString();
     questionSumText.innerText = quizDataLength.toString();
     document.title = '問題： ' + questionArray[id];
     questionTitle.innerText = questionArray[id];
@@ -64,7 +64,7 @@ function csvToJson(csv) {
     return jsonArray;
 }
 
-function makeRandom(isRandom) {
+function makeRandom() {
     if (isRandom) {
         //quizOrderArray = [0,1,2,3, ... quizDataLength - 1] → [24,63,75, ...]のようにランダムに
         for (let i = quizDataLength; i > 0; i--) {
@@ -105,7 +105,7 @@ function checkAnswer() {
     nextButton.style.display = "block";
 }
 
-let questionNum; //経過問題数
+let quizNum; //経過問題数
 let id; //問題ID
 let questionArray = new Array(); //問題タイトルの配列
 let correctAnswerArray = new Array(); //正解の配列
@@ -125,9 +125,9 @@ fetchData() //クイズデータを取ってくる
 
 //ランダム機能のチェックボックスの変更を検知
 random.addEventListener('change', () => {
-    isRandom = random.checked; //チェックの有無を確認
+    isRandom = random.checked; //ランダム機能有無を代入
     quizReset();
-    makeRandom(isRandom);
+    makeRandom();
     quizDOM();
     }
 )
@@ -135,6 +135,10 @@ random.addEventListener('change', () => {
 submitButton.addEventListener('click', checkAnswer);
 
 nextButton.addEventListener('click', () => {
-    questionNum++;
+    quizNum++;
+    if (quizNum == quizDataLength + 1) {
+        isRandom = false; //ランダム機能有無を初期状態にリセット
+        quizReset();
+    }
     quizDOM();
 });
